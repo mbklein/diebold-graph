@@ -12,7 +12,7 @@ class Presentation < ActiveRecord::Base
       if pres.election_id.nil?
         pres.update_attributes :election_id => election_id, :title => result['title'], :description => result['description']
       end
-      new_snapshots << pres.snapshots.create(:at_i => snap_time, :score => result['score'])
+      new_snapshots << pres.snapshots.create(:at_i => snap_time, :score => result['score'], :election_id => election_id)
     end
     new_snapshots.each { |snap| snap.update_aggregate_attributes }
   end
