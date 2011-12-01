@@ -2,11 +2,11 @@ class Snapshot < ActiveRecord::Base
   belongs_to :presentation
   
   def at
-    Time.at(self.at_i)
+    self.attribute_present?(:at) ? super : Time.at(self.at_i)
   end
   
   def at=(value)
-    self.at_i = value.to_i
+    self.attribute_present?(:at) ? super(value) : self.at_i = value.to_i
   end
   
   def cohort
