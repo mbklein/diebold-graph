@@ -1,9 +1,9 @@
 class UpdateDescription < ActiveRecord::Migration
   def up
-    change_column(:presentations, :description, :text)
+    change_column(:presentations, :description, :text, :limit => 5000)
   end
 
   def down
-    raise ActiveRecord::IrreversibleMigration
+    change_column(:presentations, :description, :string)
   end
 end
