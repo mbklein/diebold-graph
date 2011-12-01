@@ -23,9 +23,8 @@
       },
       yAxis: {
         title: {
-          text: 'Votes'
+          text: "Votes (<%= raw(@by.to_s.humanize) %>)"
         },
-        min: 0,
         maxZoom: 20,
         startOnTick: true,
         showFirstLabel: true
@@ -55,7 +54,7 @@
         enabled: false,
         floating: true
       },
-      series: <%= raw(@presentations.collect { |p| p.series }.to_json) %>
+      series: <%= raw(@presentations.collect { |p| p.series(@by) }.to_json) %>
     });
   });
 </script>

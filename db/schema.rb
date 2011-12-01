@@ -10,22 +10,31 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111201073313) do
+ActiveRecord::Schema.define(:version => 20111201223259) do
 
   create_table "presentations", :force => true do |t|
-    t.integer  "election_id"
-    t.string   "title"
-    t.text     "description", :limit => 5000
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer   "election_id"
+    t.string    "title"
+    t.text      "description"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
+
+  add_index "presentations", ["election_id"], :name => "index_presentations_on_election_id"
 
   create_table "snapshots", :force => true do |t|
     t.integer  "presentation_id"
-    t.datetime "at"
     t.integer  "score"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "election_id"
+    t.integer  "at_i"
+    t.integer  "deviation_from_median"
+    t.integer  "deviation_from_mean"
+    t.float    "percentage_of_max"
   end
+
+  add_index "snapshots", ["election_id", "at_i"], :name => "index_snapshots_on_election_id_and_at_i"
+  add_index "snapshots", ["presentation_id"], :name => "index_snapshots_on_presentation_id"
 
 end
