@@ -22,7 +22,7 @@ class Presentation < ActiveRecord::Base
     { 
       :name => self.title.strip, 
       :data => self.snapshots.collect { |snap|
-        [snap.at.to_i * 1000, snap.score]
+        [snap.at.to_i * 1000, snap.score ]
       }
     }
   end

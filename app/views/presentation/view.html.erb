@@ -1,56 +1,61 @@
 <script type="text/javascript">
   var chart;
   $(document).ready(function() {
-    var seriesData = <%= raw(@presentations.collect { |p| p.series }.to_json) %>;
-    $.map(seriesData, function(item) { item.pointStart = Date.parse(item.pointStart) });
     chart = new Highcharts.Chart({
       chart: {
-         renderTo: 'container',
-         defaultSeriesType: 'spline',
-         zoomType: 'x',
-         spacingRight: 20
+        renderTo: 'container',
+        defaultSeriesType: 'spline',
+        zoomType: 'xy',
+        spacingRight: 20
       },
       title: {
-         text: 'code4lib 2012 Presentation Voting'
+        text: 'code4lib 2012 Presentation Voting'
+      },
+      subtitle: {
+        text: 'Drag to zoom'
       },
       xAxis: {
-         type: 'datetime',
-         maxZoom: 14 * 24 * 3600000, // fourteen days
-         title: {
-            text: null
-         }
+        type: 'datetime',
+        maxZoom: 24 * 3600000, // one day
+        title: {
+          text: null
+        }
       },
       yAxis: {
-         title: {
-            text: 'Votes'
-         },
-         min: 0,
-         startOnTick: false,
-         showFirstLabel: false
+        title: {
+          text: 'Votes'
+        },
+        min: 0,
+        maxZoom: 20,
+        startOnTick: true,
+        showFirstLabel: true
       },
       plotOptions: {
-         spline: {
-            lineWidth: 4,
-            states: {
-               hover: {
-                  lineWidth: 5
-               }
-            },
-            marker: {
-               enabled: false,
-               states: {
-                  hover: {
-                     enabled: true,
-                     symbol: 'circle',
-                     radius: 5,
-                     lineWidth: 1
-                  }
-               }   
+        spline: {
+          lineWidth: 2,
+          states: {
+            hover: {
+              lineWidth: 5
             }
-         }
+          },
+          marker: {
+            enabled: false,
+            states: {
+              hover: {
+                enabled: true,
+                symbol: 'circle',
+                radius: 5,
+                lineWidth: 1
+              }
+            }   
+          }
+        }
       },
-      legend: { enabled: false },
-      series: seriesData
+      legend: { 
+        enabled: false,
+        floating: true
+      },
+      series: <%= raw(@presentations.collect { |p| p.series }.to_json) %>
     });
   });
 </script>
