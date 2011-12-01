@@ -6,7 +6,7 @@ class TimeToInt < ActiveRecord::Migration
       remove_index(:snapshots, [:election_id, :at])
     rescue
     end
-    Snapshot.find(:all).each { |snap| snap.update_attribute :at_i, snap.at.to_i unless snap.at.nil }
+    Snapshot.find(:all).each { |snap| snap.update_attribute :at_i, snap.at.to_i unless snap.at.nil? }
     remove_column(:snapshots, :at)
   end
 
@@ -17,7 +17,7 @@ class TimeToInt < ActiveRecord::Migration
       remove_index(:snapshots, [:election_id, :at_i])
     rescue
     end
-    Snapshot.find(:all).each { |snap| snap.update_attribute :at, Time.at(snap.at_i) unless snap.at_i.nil }
+    Snapshot.find(:all).each { |snap| snap.update_attribute :at, Time.at(snap.at_i) unless snap.at_i.nil? }
     remove_column(:snapshots, :at_i)
   end
 end
