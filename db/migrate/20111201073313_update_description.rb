@@ -1,6 +1,6 @@
 class UpdateDescription < ActiveRecord::Migration
   def up
-    change_column(:presentations, :description, :text, :limit => 5000)
+    change_column(:presentations, :description, :text)
   end
 
   def down
