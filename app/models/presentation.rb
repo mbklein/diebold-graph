@@ -5,6 +5,7 @@ class Presentation < ActiveRecord::Base
   def self.snapshot(election_id)
     results = JSON.parse(@@client[election_id].get({:accept => :json}))
     snap_time = Time.now
+    snap_time = Time.at((snap_time - snap_time.sec).to_i)
     results.each do |result|
       pres = Presentation.find_or_create_by_id(result['id'])
       if pres.election_id.nil?

@@ -5,4 +5,9 @@ namespace :diebold do
     Presentation.snapshot(args[:election_id])
   end
   
+  desc "Normalize snapshots"
+  task :normalize => :environment do |t|
+    Snapshot.find(:all).each { |snap| snap.at = Time.at((snap.at - snap.at.sec).to_i); snap.save }
+  end
+  
 end
