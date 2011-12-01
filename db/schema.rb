@@ -10,12 +10,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111121172022) do
+ActiveRecord::Schema.define(:version => 20111201073313) do
 
   create_table "presentations", :force => true do |t|
     t.integer  "election_id"
     t.string   "title"
-    t.string   "description"
+    t.text     "description", :limit => 5000
     t.datetime "created_at"
     t.datetime "updated_at"
   end
