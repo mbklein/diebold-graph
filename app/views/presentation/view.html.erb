@@ -1,6 +1,42 @@
 <script type="text/javascript">
   var chart;
   $(document).ready(function() {
+    var qs = (function(a) {
+        if (a == "") return {};
+        var b = {};
+        for (var i = 0; i < a.length; ++i) {
+          var p=a[i].split('=');
+          if (p.length != 2) continue;
+          b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+        }
+        return b;
+    })(window.location.search.substr(1).split('&'));
+
+    var displayBy = function(params) {
+      var label;
+      if (params['label']) {
+        label = params['label'];
+        delete params['label'];
+      }
+      for (var p in params) {
+        qs[p] = params[p];
+      }
+      chart.showLoading();
+      $.getJSON(document.location.pathname, qs).success(function(data,status,xhr) { 
+        while(chart.series.length > 0) {
+          chart.series[0].remove(false);
+        }
+        chart.counters.color = 0;
+        $.each(data, function(i,d) { 
+          chart.addSeries(d,false) 
+        });
+        label && $(chart.yAxis[0].axisTitle.element).text('Votes (' + label + ')');
+        chart.redraw();
+        chart.hideLoading();
+      }); 
+      return false;
+    }
+
     chart = new Highcharts.Chart({
       chart: {
         renderTo: 'container',
@@ -56,13 +92,22 @@
       },
       series: <%= render_series_data %>
     });
+    
+    $('a.replace-data').click(function() { displayBy(this.dataset); return false });
   });
 </script>
 
 <div id="container" class="highcharts-container" style="height:768px; margin: 0 2em; clear:both; min-width: 600px">
 </div>
 
+<p>
 View by:
 <%= ['score','normalized_score','deviation_from_median','deviation_from_mean'].collect do |by|
-  @by.to_s == by ? by.humanize : link_to(by.humanize, view_url(:election_id => params[:election_id], :by => by, :top => params[:top]))
+  link_to(by.humanize, view_url(:election_id => params[:election_id], :by => by, :top => params[:top]), :class => 'replace-data', :'data-by' => by, :'data-label' => by.humanize)
 end.join(' | ').html_safe %>
+</p>
+<p>
+View:
+  <%= link_to('Top 20', view_url(:election_id => params[:election_id], :by => params[:by], :top => 20), :class => 'replace-data', :'data-top' => '20') %> |
+  <%= link_to('All', view_url(:election_id => params[:election_id], :by => params[:by]), :class => 'replace-data', :'data-top' => '') %>
+</p>
