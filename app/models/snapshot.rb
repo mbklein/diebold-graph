@@ -18,6 +18,8 @@ class Snapshot < ActiveRecord::Base
     median = scores[scores.length / 2]
     mean = scores.inject(0) { |t,s| t+=s } / scores.length
 
-    self.update_attributes :deviation_from_median => self.score-median, :deviation_from_mean => self.score-mean, :percentage_of_max => (self.score.to_f / scores.max.to_f) * 100
+    self.update_attributes :deviation_from_median => self.score-median, 
+      :deviation_from_mean => self.score-mean, 
+      :normalized_score => ((self.score - scores.first).to_f / (scores.last - scores.first).to_f) * 100
   end
 end

@@ -1,5 +1,5 @@
 Diebold::Application.routes.draw do
-  match "elections/:id" => "presentation#view", :via => :get
+  match "elections/:id" => "presentation#view", :via => :get, :as => 'view'
   match "elections/:id" => "presentation#update", :via => :post
 
   # The priority is based upon order of creation:

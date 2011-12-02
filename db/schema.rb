@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111201223259) do
+ActiveRecord::Schema.define(:version => 20111201231757) do
 
   create_table "presentations", :force => true do |t|
     t.integer   "election_id"
@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(:version => 20111201223259) do
     t.integer  "at_i"
     t.integer  "deviation_from_median"
     t.integer  "deviation_from_mean"
-    t.float    "percentage_of_max"
+    t.float    "normalized_score"
   end
 
   add_index "snapshots", ["election_id", "at_i"], :name => "index_snapshots_on_election_id_and_at_i"
