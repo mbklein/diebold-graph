@@ -54,7 +54,7 @@
         enabled: false,
         floating: true
       },
-      series: <%= raw(@presentations.collect { |p| p.series(@by) }.to_json) %>
+      series: <%= render_series_data %>
     });
   });
 </script>
@@ -64,5 +64,5 @@
 
 View by:
 <%= ['score','normalized_score','deviation_from_median','deviation_from_mean'].collect do |by|
-  @by.to_s == by ? by.humanize : link_to(by.humanize, view_url(:election_id => params[:election_id], :by => by))
+  @by.to_s == by ? by.humanize : link_to(by.humanize, view_url(:election_id => params[:election_id], :by => by, :top => params[:top]))
 end.join(' | ').html_safe %>

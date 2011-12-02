@@ -1,5 +1,5 @@
 class Presentation < ActiveRecord::Base
-  has_many :snapshots
+  has_many :snapshots, :order => 'at_i ASC'
 
   @@client = RestClient::Resource.new("http://vote.code4lib.org/election/results/")
   def self.snapshot(election_id)
