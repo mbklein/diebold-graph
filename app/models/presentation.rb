@@ -26,7 +26,7 @@ class Presentation < ActiveRecord::Base
     { 
       :name => self.title.strip, 
       :data => self.snapshots.collect { |snap|
-        [snap.at_i * 1000, snap.send(attribute) ]
+        [(snap.at_i + Time.now.utc_offset) * 1000, snap.send(attribute) ]
       }
     }
   end
