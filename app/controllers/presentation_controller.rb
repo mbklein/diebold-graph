@@ -14,7 +14,7 @@ class PresentationController < ApplicationController
 
   def update
     Presentation.snapshot params[:id]
-    render :text => 'OK', :status => 200
+    render :text => '', :status => 200
   end
   
 end
