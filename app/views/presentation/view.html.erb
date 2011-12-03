@@ -28,20 +28,29 @@
         }
         chart.counters.color = 0;
         $.each(data, function(i,d) { 
-          chart.addSeries(d,false) 
+          chart.addSeries(d,false,false);
         });
         label && $(chart.yAxis[0].axisTitle.element).text('Votes (' + label + ')');
-        chart.redraw();
+        chart.redraw(false);
         chart.hideLoading();
       }); 
       return false;
     }
 
+    var resizeChart = function() {
+      var c = $('#container');
+      c.height($(window).height()-16);
+      chart && chart.setSize(c.width(), c.height(), false);
+    };
+    $(window).resize(resizeChart);
+    resizeChart();
+    
     chart = new Highcharts.Chart({
       chart: {
         renderTo: 'container',
         defaultSeriesType: 'spline',
         zoomType: 'x',
+        reflow: false,
         spacingRight: 20
       },
       title: {
@@ -88,26 +97,17 @@
       },
       legend: { 
         enabled: false,
-        floating: true
+        floating: false,
+        style: { height: '200px' },
+        itemStyle: { 'font-size': '80%' }
       },
       series: <%= render_series_data %>
     });
     
-    $('a.replace-data').click(function() { displayBy(this.dataset); return false });
+    $('select.replace-data').change(function() { displayBy($(':selected',this)[0].dataset); return false });
   });
 </script>
 
-<div id="container" class="highcharts-container" style="height:768px; margin: 0 2em; clear:both; min-width: 600px">
+<%= render(:partial => 'nav_links') %>
+<div id="container" class="highcharts-container" style="height:768px; margin: 0 2em; position: relative; min-width: 600px">
 </div>
-
-<p>
-View by:
-<%= ['score','normalized_score','deviation_from_median','deviation_from_mean'].collect do |by|
-  link_to(by.humanize, view_url(:election_id => params[:election_id], :by => by, :top => params[:top]), :class => 'replace-data', :'data-by' => by, :'data-label' => by.humanize)
-end.join(' | ').html_safe %>
-</p>
-<p>
-View:
-  <%= link_to('Top 20', view_url(:election_id => params[:election_id], :by => params[:by], :top => 20), :class => 'replace-data', :'data-top' => '20') %> |
-  <%= link_to('All', view_url(:election_id => params[:election_id], :by => params[:by]), :class => 'replace-data', :'data-top' => '') %>
-</p>
